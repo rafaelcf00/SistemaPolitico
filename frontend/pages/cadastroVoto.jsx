@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { VotoRoute, getSessaoRoute } from "../utils/apiRoutes";
+import { VotoRoute } from "../utils/apiRoutes";
 import Layout from "../components/common/Layout";
 import Button from "../components/common/Button";
 import Input from "../components/common/Formulario/Input";

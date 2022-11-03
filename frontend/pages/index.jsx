@@ -1,6 +1,8 @@
 import Button from "../components/common/Button";
 import Layout from "../components/common/Layout";
 import axios from "axios";
+import Input from "../components/common/Formulario/Input";
+import { useState } from "react";
 
 const Home = ({ dados }) => {
   return (
@@ -22,6 +24,7 @@ const Home = ({ dados }) => {
             />
           </div>
         </div>
+
         <ul className="overflow-auto h-60">
           {dados.map((dado, index) => (
             <li key={index}>
@@ -40,11 +43,16 @@ const Home = ({ dados }) => {
             </li>
           ))}
         </ul>
-        <div className="mt-12 w-28">
+        <div className="mt-12 flex w-full justify-between">
           <Button
             label="Listar Votos"
             customClass="bg-gray-600 hover:bg-gray-500"
             href="listaVotos/"
+          />
+          <Button
+            label="Quantidade de Votos"
+            customClass="bg-gray-600 hover:bg-gray-500"
+            href="listaQtdVotos/"
           />
         </div>
       </Layout>

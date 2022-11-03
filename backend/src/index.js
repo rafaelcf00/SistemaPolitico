@@ -11,6 +11,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Selecionar todos Votos
+
 app.get("/listaVoto", async (req, res) => {
   try {
     const { rows } = await pool.query(`SELECT * FROM voto`);
@@ -21,18 +23,19 @@ app.get("/listaVoto", async (req, res) => {
   }
 });
 
-app.get("/listaVoto/:id", async (req, res) => {
+// Selecionar quantidade de votos das sessões
+
+app.get("/listaQuantidadeVotos/", async (req, res) => {
   try {
-    const { id } = req.params;
-    const { rows } = await pool.query(
-      `SELECT resposta, estado FROM voto where sessao_voto = ${id}`
-    );
+    const { rows } = await pool.query(`SELECT id, qtd_votospos FROM sessao`);
     console.log(rows);
     return res.status(200).send(rows);
   } catch (err) {
     return res.status(400).send(err);
   }
 });
+
+// Selecionar todas sessões
 
 app.get("/listaSessao", async (req, res) => {
   try {
@@ -44,33 +47,74 @@ app.get("/listaSessao", async (req, res) => {
   }
 });
 
-app.get("/listaSessao/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { rows } = await pool.query(
-      `SELECT id, nome FROM sessao where id = ${id}`
-    );
-    console.log(rows);
-    return res.status(200).send(rows);
-  } catch (err) {
-    return res.status(400).send(err);
-  }
-});
+// Inserir Voto
 
 app.post("/inserirVoto/", async (req, res) => {
   const { voto, estado, sessao } = req.body;
   console.log(voto);
   console.log(estado);
   console.log(Number(sessao));
-  try {
-    const newVoto = await pool.query(
-      `INSERT INTO voto (resposta, estado, sessao_voto) VALUES ('${voto}', '${estado}', ${sessao})`
+
+  const id = sessao;
+
+  await pool.query(
+    `INSERT INTO voto (resposta, estado, sessao_voto) VALUES ('${voto}', '${estado}', ${sessao})
+`
+  );
+
+  if (voto == "nao" || voto == "não" || voto == "Nao" || voto == "Não") {
+    let qtdNeg;
+    try {
+      const QtdNeg = await pool
+        .query(`SELECT qtd_votosneg from sessao where id = ${id}`)
+        .then((resp) => {
+          let qtdNegBanco = resp.rows[0].qtd_votosneg;
+          qtdNeg = qtdNegBanco;
+          qtdNeg++;
+
+          pool.query(
+            `UPDATE sessao SET qtd_votosneg = ${qtdNeg} where id = ${id}
+          `
+          );
+        });
+
+      console.log(qtdNeg);
+
+      return res.status(200).send(res.qtdNeg);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  } else if (voto == "sim" || voto == "Sim") {
+    let qtdSim;
+    try {
+      const QtdSim = await pool
+        .query(`SELECT qtd_votospos from sessao where id = ${id}`)
+        .then((resp) => {
+          let qtdSimBanco = resp.rows[0].qtd_votospos;
+          qtdSim = qtdSimBanco;
+          qtdSim++;
+
+          pool.query(
+            `UPDATE sessao SET qtd_votospos = ${qtdSim} where id = ${id}
+          `
+          );
+        });
+
+      console.log(qtdSim);
+
+      return res.status(200).send(res.qtdSim);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  } else {
+    pool.query(
+      `UPDATE sessao SET qtd_votospos = ${qtdSim} where id = ${id}
+    `
     );
-    return res.status(200).send(newVoto.rows);
-  } catch (err) {
-    return res.status(400).send(err);
   }
 });
+
+// Inserir Sessão
 
 app.post("/inserirSessao/", async (req, res) => {
   const { nome, tipo, estado, descricao } = req.body;
@@ -85,6 +129,8 @@ app.post("/inserirSessao/", async (req, res) => {
   }
 });
 
+// Deletar Sessão
+
 app.delete("/deleteSessao/", async (req, res) => {
   const { id } = req.body;
 
@@ -92,6 +138,23 @@ app.delete("/deleteSessao/", async (req, res) => {
 
   try {
     const newSessao = await pool.query(`DELETE FROM sessao WHERE id = ${id}`);
+    return res.status(200).send(newSessao.rows);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
+
+// Atualizar Sessão
+
+app.put("/atualizarSessao/", async (req, res) => {
+  const { id, nome, tipo, estado, descricao } = req.body;
+
+  console.log(id);
+
+  try {
+    const newSessao = await pool.query(
+      `UPDATE sessao SET nome = '${nome}', tipo = '${tipo}', estado = '${estado}', descricao = '${descricao}'  where id = ${id}`
+    );
     return res.status(200).send(newSessao.rows);
   } catch (err) {
     return res.status(400).send(err);

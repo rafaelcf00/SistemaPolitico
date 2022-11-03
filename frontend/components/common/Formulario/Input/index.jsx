@@ -1,4 +1,4 @@
-const Input = ({ onChange, label, id, placeholder }) => {
+const Input = ({ onChange, label, id, placeholder, type, customClass }) => {
   return (
     <>
       <div className="flex flex-col mb-4">
@@ -6,8 +6,9 @@ const Input = ({ onChange, label, id, placeholder }) => {
           {label}
         </label>
         <input
-          className="bg-gray-100 mt-2 p-3"
+          className={`bg-gray-100 mt-2 p-3 ${customClass}`}
           id={id}
+          type={type}
           placeholder={placeholder}
           onChange={(e) => {
             if (onChange) {
