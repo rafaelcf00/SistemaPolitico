@@ -42,3 +42,5 @@ As seguintes ferramentas, linguagens, bibliotecas e tecnologias foram usadas na 
 
 
 → [Voltar ao topo](#topo)
+
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://www.youtube.com/watch?v=g4d-5CtKSl8)
