@@ -3,7 +3,8 @@
 <p align="center">
     <a href="#sobre">Sobre</a>  |     
     <a href="#tecnologias">Tecnologias</a>  |  
-    <a href="#equipe">Equipe</a>  |  
+    <a href="#equipe">Equipe</a>  |
+    <a href="#final">Apresentação Final</a>  |
 </p>
 
 <span id="sobre">
@@ -43,5 +44,11 @@ As seguintes ferramentas, linguagens, bibliotecas e tecnologias foram usadas na 
 
 → [Voltar ao topo](#topo)
     
-   
+<span id="final">
+
+## :clapper: Apresentação Final do Projeto :clapper:
+    
 https://user-images.githubusercontent.com/38407095/199858121-1b969a14-84ce-48cf-96ea-1a621a97ca86.mp4
+    
+ 
+→ [Voltar ao topo](#topo)
